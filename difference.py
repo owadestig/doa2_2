@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-'''
+"""
 Assignment 2, Problem 1: Search String Replacement
 
 Team Number:
 Student Names:
-'''
+"""
 
-'''
+"""
 Copyright: justin.pearson@it.uu.se and his teaching assistants, 2022.
 
 This file is part of course 1DL231 at Uppsala University, Sweden.
@@ -19,15 +19,17 @@ The copyright notice and permission notice above shall be included in
 all copies and extensions of this file, and those are not allowed to
 appear publicly on the internet, both during a course instance and
 forever after.
-'''
+"""
 from typing import *  # noqa
 import unittest  # noqa
 import math  # noqa
 from src.difference_data import data  # noqa
 from collections import defaultdict  # noqa
 from string import ascii_lowercase  # noqa
+
 # If your solution needs a queue, then you can use this one:
 from collections import deque  # noqa
+
 # If you need to log information during tests, execution, or both,
 # then you can use this library:
 # Basic example:
@@ -39,6 +41,19 @@ import logging  # noqa
 
 # Solution to Task B:
 def min_difference(s: str, r: str, R: Dict[str, Dict[str, int]]) -> int:
+
+    # STEP 1: MAKE STRINGS MATCH UP WITH - WHERE THERE IS NO MATCH
+    strToMatch = str(r)
+    strToManip = str(s)
+    i = 0
+    matchingStr = ""
+
+    while len(strToMatch) != len(strToManip):
+        if strToManip[i] == strToMatch[i]:
+            matctingStr = matchingStr + strToManip[i]
+        else:
+            
+
     """
     Pre:  For all characters c in s and k in r,
           then R[c][k] exists, and R[k][c] exists.
@@ -52,8 +67,9 @@ def min_difference(s: str, r: str, R: Dict[str, Dict[str, int]]) -> int:
 
 
 # Solution to Task C:
-def min_difference_align(s: str, r: str,
-                         R: Dict[str, Dict[str, int]]) -> Tuple[int, str, str]:
+def min_difference_align(
+    s: str, r: str, R: Dict[str, Dict[str, int]]
+) -> Tuple[int, str, str]:
     """
     Pre:  For all characters c in s and k in r,
           then R[c][k] exists, and R[k][c] exists.
@@ -82,21 +98,23 @@ def qwerty_distance() -> Dict[str, Dict[str, int]]:
         R['a']['b']  # result: 5
     """
     R = defaultdict(dict)
-    R['-']['-'] = 0
+    R["-"]["-"] = 0
     zones = ["dfghjk", "ertyuislcvbnm", "qwazxpo"]
     keyboard = ["qwertyuiop", "asdfghjkl", "zxcvbnm"]
     for row, content in enumerate(zones):
         for char in content:
-            R['-'][char] = row + 1
-            R[char]['-'] = 3 - row
+            R["-"][char] = row + 1
+            R[char]["-"] = 3 - row
     for a, b in ((a, b) for b in ascii_lowercase for a in ascii_lowercase):
         row_a, pos_a = next(
             (row, content.index(a))
-            for row, content in enumerate(keyboard) if a in content
+            for row, content in enumerate(keyboard)
+            if a in content
         )
         row_b, pos_b = next(
             (row, content.index(b))
-            for row, content in enumerate(keyboard) if b in content
+            for row, content in enumerate(keyboard)
+            if b in content
         )
         R[a][b] = abs(row_b - row_a) + abs(pos_a - pos_b)
     return R
@@ -111,7 +129,8 @@ class MinDifferenceTest(unittest.TestCase):
     cases if you wish.
     (You may delete this class from your submitted solution.)
     """
-    logger = logging.getLogger('MinDifferenceTest')
+
+    logger = logging.getLogger("MinDifferenceTest")
     data = data
     min_difference = min_difference
     min_difference_align = min_difference_align
@@ -127,36 +146,47 @@ class MinDifferenceTest(unittest.TestCase):
         self.assertEqual(type(res_s), str)
         self.assertEqual(type(res_r), str)
 
-    def assertMinDifference(self, s: str, r: str, difference: int,
-                            R: Dict[str, Dict[str, int]]) -> None:
+    def assertMinDifference(
+        self, s: str, r: str, difference: int, R: Dict[str, Dict[str, int]]
+    ) -> None:
         res_difference = MinDifferenceTest.min_difference(s, r, R)
         self.assertMinDifferenceSignature(res_difference)
-        self.assertEqual(res_difference, difference,
-                         f'Difference between s="{s}" and r="{r}" was '
-                         f'{res_difference}, {difference} expected.')
+        self.assertEqual(
+            res_difference,
+            difference,
+            f'Difference between s="{s}" and r="{r}" was '
+            f"{res_difference}, {difference} expected.",
+        )
 
     def assertMinDifferenceAlign(
-            self,
-            s: str,
-            r: str,
-            difference: int,
-            R: int,
-            solutions: Union[Set[Tuple[str, str]], None] = None) -> None:
+        self,
+        s: str,
+        r: str,
+        difference: int,
+        R: int,
+        solutions: Union[Set[Tuple[str, str]], None] = None,
+    ) -> None:
         t = MinDifferenceTest.min_difference_align(s, r, R)
         self.assertMinDifferenceAlignSignature(t)
         res_difference, res_s, res_r = t
-        self.assertEqual(res_difference, difference,
-                         f'Difference between s="{s}" and r="{r}" was '
-                         f'{res_difference}, {difference} expected.')
+        self.assertEqual(
+            res_difference,
+            difference,
+            f'Difference between s="{s}" and r="{r}" was '
+            f"{res_difference}, {difference} expected.",
+        )
 
         self.assertEqual(len(res_s), len(res_r), f'len("{s}") != len("{r}")')
 
         res_sum = sum((R[res_s[i]][res_r[i]] for i in range(len(res_s))))
 
-        self.assertEqual(res_sum, difference,
-                         f'Difference for s="{s}", r={r}, res_r={res_s}, and '
-                         f'"r="{res_r}" was summed to {res_sum}, {difference}'
-                         ' expected.')
+        self.assertEqual(
+            res_sum,
+            difference,
+            f'Difference for s="{s}", r={r}, res_r={res_s}, and '
+            f'"r="{res_r}" was summed to {res_sum}, {difference}'
+            " expected.",
+        )
         if solutions is not None:
             self.assertIn((res_s, res_r), solutions)
 
@@ -170,7 +200,7 @@ class MinDifferenceTest(unittest.TestCase):
 
         passing is not a guarantee of correctness.
         """
-        alphabet = ascii_lowercase + '-'
+        alphabet = ascii_lowercase + "-"
         # The simplest (reasonable) resemblance matrix:
         R = {a: {b: (0 if a == b else 1) for b in alphabet} for a in alphabet}
         # Warning: we may (read: 'will') use another matrix!
@@ -188,17 +218,25 @@ class MinDifferenceTest(unittest.TestCase):
 
         passing is not a guarantee of correctness.
         """
-        alphabet = ascii_lowercase + '-'
+        alphabet = ascii_lowercase + "-"
         # The simplest (reasonable) resemblance matrix:
         R = {a: {b: (0 if a == b else 1) for b in alphabet} for a in alphabet}
         # Warning: we may (read: 'will') use another matrix!
-        self.assertMinDifferenceAlign("dinamck", "dynamic", 3, R,
-                                      {("dinam-ck", "dynamic-"),
-                                       ("dinamck", "dynamic")})
+        self.assertMinDifferenceAlign(
+            "dinamck",
+            "dynamic",
+            3,
+            R,
+            {("dinam-ck", "dynamic-"), ("dinamck", "dynamic")},
+        )
 
-        self.assertMinDifferenceAlign("polynomial", "exponential", 6, R,
-                                      {("--polynomial", "exponen-tial"),
-                                       ("--polynomial", "exponent-ial")})
+        self.assertMinDifferenceAlign(
+            "polynomial",
+            "exponential",
+            6,
+            R,
+            {("--polynomial", "exponen-tial"), ("--polynomial", "exponent-ial")},
+        )
 
     def test_min_difference(self) -> None:
         """
@@ -206,11 +244,13 @@ class MinDifferenceTest(unittest.TestCase):
         """
         for i, instance in enumerate(MinDifferenceTest.data):
             with self.subTest(instance=i):
-                self.assertMinDifference(instance["s"],
-                                         instance["r"],
-                                         instance["difference"],
-                                         # QWERTY resemblance matrix:
-                                         qwerty_distance())
+                self.assertMinDifference(
+                    instance["s"],
+                    instance["r"],
+                    instance["difference"],
+                    # QWERTY resemblance matrix:
+                    qwerty_distance(),
+                )
 
     def test_min_difference_align(self) -> None:
         """
@@ -218,15 +258,17 @@ class MinDifferenceTest(unittest.TestCase):
         """
         for i, instance in enumerate(MinDifferenceTest.data):
             with self.subTest(instance=i):
-                self.assertMinDifferenceAlign(instance["s"],
-                                              instance["r"],
-                                              instance["difference"],
-                                              # QWERTY resemblance matrix:
-                                              qwerty_distance(),
-                                              instance["solutions"])
+                self.assertMinDifferenceAlign(
+                    instance["s"],
+                    instance["r"],
+                    instance["difference"],
+                    # QWERTY resemblance matrix:
+                    qwerty_distance(),
+                    instance["solutions"],
+                )
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     # Set logging config to show debug messages:
     logging.basicConfig(level=logging.DEBUG)
     # run unit tests (failfast=True stops testing after the first failed test):
