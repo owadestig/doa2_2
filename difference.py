@@ -52,7 +52,8 @@ def min_difference(s: str, r: str, R: Dict[str, Dict[str, int]]) -> int:
         if strToManip[i] == strToMatch[i]:
             matctingStr = matchingStr + strToManip[i]
         else:
-            
+            s
+        i++
 
     """
     Pre:  For all characters c in s and k in r,
