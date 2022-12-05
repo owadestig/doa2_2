@@ -90,43 +90,43 @@ def update_MST_4(G: Graph, T: Graph, e: Tuple[str, str], weight: int) -> None:
     G.set_weight(u, v, weight)
 
     
-    nodesOfG1 = set(u)
-    nodesOfG2 = set(v)
+    nodes_of_g1 = set(u)
+    nodes_of_g2 = set(v)
     
-    stackG1 = [u]
-    stackG2 = [v]
+    stack_g1 = [u]
+    stack_g2 = [v]
 
     #Find the nodes in T that are on one side of the disconected graph
-    while len(stackG1) > 0:
-        x = stackG1.pop()
+    while len(stack_g1) > 0:
+        x = stack_g1.pop()
         for y in T.neighbors(x):
-            if y not in nodesOfG1:
-                nodesOfG1.add(y)
-                stackG1.append(y)
+            if y not in nodes_of_g1:
+                nodes_of_g1.add(y)
+                stack_g1.append(y)
 
     #Find the nodes in T that are on the other side of the disconected graph
-    while len(stackG2) > 0:
-        x = stackG2.pop()
+    while len(stack_g2) > 0:
+        x = stack_g2.pop()
         for y in T.neighbors(x):
-            if y not in nodesOfG2:
-                nodesOfG2.add(y)
-                stackG2.append(y)
+            if y not in nodes_of_g2:
+                nodes_of_g2.add(y)
+                stack_g2.append(y)
 
     #Find all edges in the graph G
     edges = G.edges
-    edgesInTheCut = []
+    edges_in_the_cut = []
 
     #Find all edges that would connect T into a spanning tree again.
     for e in edges:
-        if (e[0] in nodesOfG1 and e[1] in nodesOfG2 ) or (e[1] in nodesOfG1 and e[0] in nodesOfG2):
-            edgesInTheCut.append((e, G.weight(e[0], e[1])))
+        if (e[0] in nodes_of_g1 and e[1] in nodes_of_g2 ) or (e[1] in nodes_of_g1 and e[0] in nodes_of_g2):
+            edges_in_the_cut.append((e, G.weight(e[0], e[1])))
     
     #Find the edge that also would make T into a minimum spanning tree by finding the one with
     #minimum weight
-    (edgeToAdd, w) = min(edgesInTheCut, key=lambda x: x[1])
+    (edge_to_add, w) = min(edges_in_the_cut, key=lambda x: x[1])
 
     #Add that edge to T to make T into a MST of the updated graph G
-    T.add_edge(edgeToAdd[0], edgeToAdd[1], weight=w)
+    T.add_edge(edge_to_add[0], edge_to_add[1], weight=w)
     return T
 
 
