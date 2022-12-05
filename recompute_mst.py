@@ -3,8 +3,8 @@
 '''
 Assignment 2, Problem 2: Recomputing a Minimum Spanning Tree
 
-Team Number:
-Student Names:
+Team Number: Team 15
+Student Names: Jonas Teglund & Oscar Wadestig
 '''
 
 '''
